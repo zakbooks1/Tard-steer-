@@ -1,12 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-interface SnakeGameProps {
-  onScoreUpdate: (score: number) => void;
-  key?: string | number;
-}
-
-export function SnakeGame({ onScoreUpdate }: SnakeGameProps) {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+export function SnakeGame({ onScoreUpdate }) {
+  const canvasRef = useRef(null);
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(() => {
     const saved = localStorage.getItem('snake_highscore');
@@ -26,14 +21,14 @@ export function SnakeGame({ onScoreUpdate }: SnakeGameProps) {
     direction: { x: 0, y: -1 },
     nextDirection: { x: 0, y: -1 },
     food: { x: 5, y: 5 },
-    particles: [] as Array<{ x: number; y: number; vx: number; vy: number; color: string; alpha: number; size: number }>,
+    particles: [],
     gameSpeed: 130, // ms
     lastTick: 0,
     score: 0,
   });
 
   // Helper to change direction cleanly from keyboard or mobile controller
-  const changeDirection = (newDir: { x: number; y: number }) => {
+  const changeDirection = (newDir) => {
     if (!hasStarted || gameOver || isPaused) return;
     const dir = stateRef.current.direction;
     // Prevent self collision by making 180 degree turns illegal
@@ -45,14 +40,14 @@ export function SnakeGame({ onScoreUpdate }: SnakeGameProps) {
   };
 
   // Touch Swipe Gesture Refs for Mobile playability
-  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const touchStartRef = useRef(null);
 
-  const handleTouchStart = (e: React.TouchEvent<HTMLCanvasElement>) => {
+  const handleTouchStart = (e) => {
     const touch = e.touches[0];
     touchStartRef.current = { x: touch.clientX, y: touch.clientY };
   };
 
-  const handleTouchEnd = (e: React.TouchEvent<HTMLCanvasElement>) => {
+  const handleTouchEnd = (e) => {
     if (!touchStartRef.current) return;
     const touch = e.changedTouches[0];
     const dx = touch.clientX - touchStartRef.current.x;
@@ -89,7 +84,7 @@ export function SnakeGame({ onScoreUpdate }: SnakeGameProps) {
   }, []);
 
   // Update high score helper
-  const updateHighScore = (newScore: number) => {
+  const updateHighScore = (newScore) => {
     if (newScore > highScore) {
       setHighScore(newScore);
       localStorage.setItem('snake_highscore', newScore.toString());
@@ -97,7 +92,7 @@ export function SnakeGame({ onScoreUpdate }: SnakeGameProps) {
   };
 
   // Generate food at random cell (not occupied by snake)
-  const spawnFood = (snake: Array<{ x: number; y: number }>) => {
+  const spawnFood = (snake) => {
     let newFood;
     let isOnSnake = true;
     while (isOnSnake) {
@@ -105,10 +100,9 @@ export function SnakeGame({ onScoreUpdate }: SnakeGameProps) {
         x: Math.floor(Math.random() * CELL_COUNT),
         y: Math.floor(Math.random() * CELL_COUNT),
       };
-      // eslint-disable-next-line @typescript-eslint/no-loop-func
-      isOnSnake = snake.some((part) => part.x === newFood!.x && part.y === newFood!.y);
+      isOnSnake = snake.some((part) => part.x === newFood.x && part.y === newFood.y);
     }
-    return newFood!;
+    return newFood;
   };
 
   // Trigger game start / reset
@@ -140,7 +134,7 @@ export function SnakeGame({ onScoreUpdate }: SnakeGameProps) {
 
   // Move command handlers
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
+    const handleKeyDown = (e) => {
       if (!hasStarted) {
         if (e.key === ' ' || e.key === 'Enter') {
           startGame();
@@ -190,14 +184,14 @@ export function SnakeGame({ onScoreUpdate }: SnakeGameProps) {
 
   // Game Loop
   useEffect(() => {
-    let animId: number;
+    let animId;
     const canvas = canvasRef.current;
     if (!canvas) return;
 
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const renderLoop = (timestamp: number) => {
+    const renderLoop = () => {
       const state = stateRef.current;
       const now = Date.now();
       const delta = now - state.lastTick;

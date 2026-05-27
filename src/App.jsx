@@ -24,15 +24,14 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import defaultGamesList from './games.json';
-import { Game, GameCategory } from './types';
 import { SnakeGame } from './components/SnakeGame';
 import { BrickBreakerGame } from './components/BrickBreakerGame';
 
 export default function App() {
   // Merge pre-installed games with user custom unblocked games
-  const [games, setGames] = useState<Game[]>([]);
-  const [selectedGame, setSelectedGame] = useState<Game | null>(null);
-  const [selectedCategory, setSelectedCategory] = useState<GameCategory>('all');
+  const [games, setGames] = useState([]);
+  const [selectedGame, setSelectedGame] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   
   // Custom game list form modal toggle
@@ -41,21 +40,21 @@ export default function App() {
   // Custom game form inputs
   const [newTitle, setNewTitle] = useState('');
   const [newUrl, setNewUrl] = useState('');
-  const [newCategory, setNewCategory] = useState<'arcade' | 'puzzle' | 'action' | 'retro'>('arcade');
+  const [newCategory, setNewCategory] = useState('arcade');
   const [newDesc, setNewDesc] = useState('');
   const [newControls, setNewControls] = useState('');
   const [newInstructions, setNewInstructions] = useState('');
   const [formError, setFormError] = useState('');
 
   // Local storage bookmarks/recents
-  const [favorites, setFavorites] = useState<string[]>([]);
-  const [recentGameIds, setRecentGameIds] = useState<string[]>([]);
+  const [favorites, setFavorites] = useState([]);
+  const [recentGameIds, setRecentGameIds] = useState([]);
   
   // Theater utilities
   const [isDimmed, setIsDimmed] = useState(false);
   const [iframeKey, setIframeKey] = useState(0); // to force reload iframe
   const [nativeScore, setNativeScore] = useState(0);
-  const theaterContainerRef = useRef<HTMLDivElement | null>(null);
+  const theaterContainerRef = useRef(null);
 
   // Load baseline on mount
   useEffect(() => {
@@ -73,10 +72,10 @@ export default function App() {
 
     // 3. Custom user unblocked games
     const savedCustom = localStorage.getItem('unblocked_custom');
-    let customList: Game[] = [];
+    let customList = [];
     if (savedCustom) {
       try {
-        const parsed = JSON.parse(savedCustom) as Game[];
+        const parsed = JSON.parse(savedCustom);
         customList = parsed.map(g => ({
           ...g,
           type: 'iframe', // custom games added by URL are always iframe
@@ -86,11 +85,11 @@ export default function App() {
     }
 
     // Set combined structure
-    setGames([...defaultGamesList as Game[], ...customList]);
+    setGames([...defaultGamesList, ...customList]);
   }, []);
 
   // Update Favorites storage helper
-  const toggleFavorite = (id: string, e?: React.MouseEvent) => {
+  const toggleFavorite = (id, e) => {
     if (e) {
       e.stopPropagation();
       e.preventDefault();
@@ -103,7 +102,7 @@ export default function App() {
   };
 
   // Add recently played helper
-  const addToRecentPlay = (id: string) => {
+  const addToRecentPlay = (id) => {
     const filtered = recentGameIds.filter(gameId => gameId !== id);
     const updated = [id, ...filtered].slice(0, 5); // store up to 5 games max
     setRecentGameIds(updated);
@@ -111,7 +110,7 @@ export default function App() {
   };
 
   // Add custom URL game handler
-  const handleAddGame = (e: React.FormEvent) => {
+  const handleAddGame = (e) => {
     e.preventDefault();
     setFormError('');
 
@@ -124,7 +123,7 @@ export default function App() {
       return;
     }
 
-    const newGameItem: Game = {
+    const newGameItem = {
       id: `custom_${Date.now()}`,
       title: newTitle.trim(),
       description: newDesc.trim() || 'Custom unblocked game URL loaded in standard sandboxed view.',
@@ -138,7 +137,7 @@ export default function App() {
 
     // Update state and persistent localStorage
     const savedCustomRaw = localStorage.getItem('unblocked_custom');
-    let currentSaved: Game[] = [];
+    let currentSaved = [];
     if (savedCustomRaw) {
       try { currentSaved = JSON.parse(savedCustomRaw); } catch (e) { /* fallback reset */ }
     }
@@ -146,7 +145,7 @@ export default function App() {
     const updatedCustoms = [...currentSaved, newGameItem];
     localStorage.setItem('unblocked_custom', JSON.stringify(updatedCustoms));
     
-    setGames([...defaultGamesList as Game[], ...updatedCustoms]);
+    setGames([...defaultGamesList, ...updatedCustoms]);
 
     // Reset Form
     setNewTitle('');
@@ -159,7 +158,7 @@ export default function App() {
   };
 
   // Delete custom game handler
-  const handleDeleteCustomGame = (id: string, e: React.MouseEvent) => {
+  const handleDeleteCustomGame = (id, e) => {
     e.stopPropagation();
     e.preventDefault();
 
@@ -167,12 +166,12 @@ export default function App() {
     if (!savedCustomRaw) return;
 
     try {
-      const currentSaved = JSON.parse(savedCustomRaw) as Game[];
+      const currentSaved = JSON.parse(savedCustomRaw);
       const updatedCustoms = currentSaved.filter(g => g.id !== id);
       localStorage.setItem('unblocked_custom', JSON.stringify(updatedCustoms));
 
       // Refresh games list in view
-      setGames([...defaultGamesList as Game[], ...updatedCustoms]);
+      setGames([...defaultGamesList, ...updatedCustoms]);
 
       // If active deleted game is selected, close player
       if (selectedGame?.id === id) {
@@ -223,11 +222,11 @@ export default function App() {
   const recentGames = useMemo(() => {
     return recentGameIds
       .map(id => games.find(g => g.id === id))
-      .filter((g): g is Game => !!g);
+      .filter(g => !!g);
   }, [recentGameIds, games]);
 
   // Set active game trigger
-  const launchGame = (game: Game) => {
+  const launchGame = (game) => {
     setSelectedGame(game);
     addToRecentPlay(game.id);
     setIsDimmed(false);
@@ -505,7 +504,7 @@ export default function App() {
               </h3>
               
               <nav className="flex flex-col space-y-1">
-                {(['all', 'arcade', 'puzzle', 'action', 'retro', 'favorites', 'custom'] as GameCategory[]).map((cat) => {
+                {['all', 'arcade', 'puzzle', 'action', 'retro', 'favorites', 'custom'].map((cat) => {
                   const isActive = selectedCategory === cat;
                   return (
                     <button
@@ -783,9 +782,9 @@ export default function App() {
                 <X className="w-4 h-4" />
               </button>
 
-              <div className="flex items-center space-x-2.5 mb-5 PB-2 border-b border-slate-850">
+              <div className="flex items-center space-x-2.5 mb-5 pb-2 border-b border-slate-850">
                 <Bookmark className="w-5 h-5 text-cyan-400" />
-                <h3 className="text-base font-black font-sans uppercase tracking-tight text-whiteHeader text-white">
+                <h3 className="text-base font-black font-sans uppercase tracking-tight text-white">
                   ADD CUSTOM GAME LINK
                 </h3>
               </div>
@@ -839,7 +838,7 @@ export default function App() {
                     <select
                       id="add-game-category"
                       value={newCategory}
-                      onChange={(e) => setNewCategory(e.target.value as any)}
+                      onChange={(e) => setNewCategory(e.target.value)}
                       className="w-full bg-slate-950 border border-slate-800/80 rounded-lg px-2.5 py-2 text-xs font-mono text-slate-200 focus:outline-none focus:border-cyan-400 transition-colors cursor-pointer"
                     >
                       <option value="arcade">Arcade</option>
@@ -860,7 +859,7 @@ export default function App() {
                       value={newControls}
                       onChange={(e) => setNewControls(e.target.value)}
                       className="w-full bg-slate-950 border border-slate-800/80 rounded-lg px-3 py-2 text-xs font-mono text-slate-100 focus:outline-none focus:border-cyan-400 transition-colors"
-                    />
+                  />
                   </div>
                 </div>
 

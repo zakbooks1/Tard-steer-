@@ -1,33 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-interface BrickBreakerProps {
-  onScoreUpdate: (score: number) => void;
-  key?: string | number;
-}
-
-interface Particle {
-  x: number;
-  y: number;
-  vx: number;
-  vy: number;
-  color: string;
-  alpha: number;
-  size: number;
-}
-
-interface Brick {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  durability: number; // 1, 2, or 3
-  color: string;
-  active: boolean;
-}
-
-export function BrickBreakerGame({ onScoreUpdate }: BrickBreakerProps) {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const containerRef = useRef<HTMLDivElement | null>(null);
+export function BrickBreakerGame({ onScoreUpdate }) {
+  const canvasRef = useRef(null);
+  const containerRef = useRef(null);
   
   const [score, setScore] = useState(0);
   const [level, setLevel] = useState(1);
@@ -56,8 +31,8 @@ export function BrickBreakerGame({ onScoreUpdate }: BrickBreakerProps) {
     ballVx: 3,
     ballVy: -3,
     ballRadius: 6,
-    bricks: [] as Brick[],
-    particles: [] as Particle[],
+    bricks: [],
+    particles: [],
     isPaddleMovingLeft: false,
     isPaddleMovingRight: false,
     mousePos: WIDTH / 2,
@@ -65,7 +40,7 @@ export function BrickBreakerGame({ onScoreUpdate }: BrickBreakerProps) {
   });
 
   // Calculate highscore
-  const updateHighScore = (newScore: number) => {
+  const updateHighScore = (newScore) => {
     if (newScore > highScore) {
       setHighScore(newScore);
       localStorage.setItem('brick_highscore', newScore.toString());
@@ -73,7 +48,7 @@ export function BrickBreakerGame({ onScoreUpdate }: BrickBreakerProps) {
   };
 
   // Populate blocks
-  const generateBricks = (lvl: number) => {
+  const generateBricks = (lvl) => {
     const BRICK_ROWS = Math.min(6, 3 + lvl);
     const BRICK_COLS = 8;
     const BRICK_WIDTH = 46;
@@ -83,7 +58,7 @@ export function BrickBreakerGame({ onScoreUpdate }: BrickBreakerProps) {
     const OFFSET_TOP = 40;
     const OFFSET_LEFT = (WIDTH - (BRICK_COLS * (BRICK_WIDTH + BRICK_PADDING_X) - BRICK_PADDING_X)) / 2;
 
-    const list: Brick[] = [];
+    const list = [];
     const colors = ['#f43f5e', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6'];
 
     for (let r = 0; r < BRICK_ROWS; r++) {
@@ -168,17 +143,17 @@ export function BrickBreakerGame({ onScoreUpdate }: BrickBreakerProps) {
   };
 
   // Touch pad controllers steering indicators
-  const setPaddleMoveLeft = (isMoving: boolean) => {
+  const setPaddleMoveLeft = (isMoving) => {
     varsRef.current.isPaddleMovingLeft = isMoving;
   };
 
-  const setPaddleMoveRight = (isMoving: boolean) => {
+  const setPaddleMoveRight = (isMoving) => {
     varsRef.current.isPaddleMovingRight = isMoving;
   };
 
   // Handlers for keyboards
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
+    const handleKeyDown = (e) => {
       if (!hasStarted) {
         if (e.key === ' ' || e.key === 'Enter') {
           startGame();
@@ -202,7 +177,7 @@ export function BrickBreakerGame({ onScoreUpdate }: BrickBreakerProps) {
       }
     };
 
-    const handleKeyUp = (e: KeyboardEvent) => {
+    const handleKeyUp = (e) => {
       if (e.key === 'ArrowLeft' || e.key.toLowerCase() === 'a') {
         varsRef.current.isPaddleMovingLeft = false;
       } else if (e.key === 'ArrowRight' || e.key.toLowerCase() === 'd') {
@@ -220,14 +195,14 @@ export function BrickBreakerGame({ onScoreUpdate }: BrickBreakerProps) {
   }, [hasStarted, level, highScore]);
 
   // Handle Mouse / Touch controller
-  const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
+  const handleMouseMove = (e) => {
     if (!canvasRef.current) return;
     const rect = canvasRef.current.getBoundingClientRect();
     const x = e.clientX - rect.left;
     varsRef.current.paddleX = Math.max(0, Math.min(WIDTH - varsRef.current.paddleWidth, x - varsRef.current.paddleWidth / 2));
   };
 
-  const handleTouchMove = (e: React.TouchEvent<HTMLCanvasElement>) => {
+  const handleTouchMove = (e) => {
     if (!canvasRef.current || e.touches.length === 0) return;
     const rect = canvasRef.current.getBoundingClientRect();
     const x = e.touches[0].clientX - rect.left;
@@ -237,7 +212,7 @@ export function BrickBreakerGame({ onScoreUpdate }: BrickBreakerProps) {
 
   // Rendering Loop
   useEffect(() => {
-    let animId: number;
+    let animId;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
