@@ -1,0 +1,6 @@
+{
+  "name": "Unblocked Games",
+  "description": "A clean, responsive portal for playing unblocked HTML5 and retro classic games instantly in an embedded viewer.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

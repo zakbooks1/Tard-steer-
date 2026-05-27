@@ -1,0 +1,79 @@
+[
+  {
+    "id": "snake",
+    "title": "Retro Snake",
+    "description": "The timeless retro game. Guide the snake to eat the apples and grow longer without crashing into the walls or your own tail.",
+    "category": "retro",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400&auto=format&fit=crop&q=60",
+    "sourceUrl": "native-snake",
+    "type": "native",
+    "controls": ["← → ↑ ↓ or WASD (Move)", "Space (Pause)"],
+    "instructions": "Eat the red food to grow and increase your score. Every food item speeds up the game slightly. Avoid biting your own body or running into the walls!"
+  },
+  {
+    "id": "brick-breaker",
+    "title": "Neon Brick Breaker",
+    "description": "Smash your way through levels of neon blocks with a bouncy ball and a paddle. Grab dynamic power-ups and avoid dropping the ball.",
+    "category": "arcade",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400&auto=format&fit=crop&q=60",
+    "sourceUrl": "native-brickbreaker",
+    "type": "native",
+    "controls": ["← → or Mouse (Move Paddle)", "Space (Launch Ball / Pause)"],
+    "instructions": "Launch the ball to break all the glowing neon blocks above. Slide your paddle left and right to bounce the ball back up. Don't let the ball fall past the paddle!"
+  },
+  {
+    "id": "2048",
+    "title": "2048 Puzzle",
+    "description": "Combine numbered tiles on a grid to merge them, double their values, and aim for the legendary 2048 tile in this addictive logical puzzle.",
+    "category": "puzzle",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1628157582853-a796fa650a6a?w=400&auto=format&fit=crop&q=60",
+    "sourceUrl": "https://gabrielecirulli.github.io/2048/",
+    "type": "iframe",
+    "controls": ["← → ↑ ↓ (Slide Tiles)"],
+    "instructions": "When two tiles with the same number touch, they merge into one! Slide the numbers to combine them and build up to the 2048 tile."
+  },
+  {
+    "id": "flappy-bird",
+    "title": "Floppy Bird",
+    "description": "Navigate a little bird through a narrow maze of green pipes. Tap to flap your wings, find your rhythm, and master the art of gravity.",
+    "category": "action",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=400&auto=format&fit=crop&q=60",
+    "sourceUrl": "https://nebez.github.io/floppybird/",
+    "type": "iframe",
+    "controls": ["Spacebar / Click (Flap / Jump)"],
+    "instructions": "Timing is everything. Tap or press the Spacebar to flap the bird's wings and navigate it safely between the gaps in the pipes."
+  },
+  {
+    "id": "hextris",
+    "title": "Hextris Hexagon",
+    "description": "An intense twist on the block-matching puzzle genre. Spin a central hexagon to catch colored lines rain down from all six edges.",
+    "category": "puzzle",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?w=400&auto=format&fit=crop&q=60",
+    "sourceUrl": "https://hextris.io/",
+    "type": "iframe",
+    "controls": ["← → or AD keys (Rotate Hexagon)"],
+    "instructions": "Rotate the hexagon to align falling colored blocks into matching color rows. Score points by touching three or more tiles of the same color."
+  },
+  {
+    "id": "pacman",
+    "title": "Neo Retro Pacman",
+    "description": "Play a faithful HTML5 recreation of the classic arcade maze-chase game. Gobble up yellow dots, grab power pellets, and outrun the ghosts.",
+    "category": "retro",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=400&auto=format&fit=crop&q=60",
+    "sourceUrl": "https://pacman-html5.github.io/",
+    "type": "iframe",
+    "controls": ["← → ↑ ↓ of WASD (Navigate Maze)"],
+    "instructions": "Guide Pacman to eat all the dots inside the maze while avoiding the four colorful ghosts. Green power pellets let you eat ghosts for a limited time!"
+  },
+  {
+    "id": "doodle-jump",
+    "title": "Web Doodle Jumper",
+    "description": "Bounce upwards off a series of platforms, dodging black holes, monsters, and broken steps. How high can your green jumper reach?",
+    "category": "action",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=400&auto=format&fit=crop&q=60",
+    "sourceUrl": "https://arcade.github.io/doodle-jump/",
+    "type": "iframe",
+    "controls": ["← → (Move Left / Right)", "Up Arrow (Shoot Monsters)"],
+    "instructions": "Help the jumper ascend. Some platforms bounce you higher, while others crumble or move. Shoot or avoid monsters to survive your climb!"
+  }
+]
